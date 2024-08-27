@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-   import './App.scss';
+import './App.scss';
 
-   
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const octaves = [3, 4, 5];
 const numColumns = 16;
@@ -12,12 +11,12 @@ interface MatrixCellProps {
   onClick: () => void;
 }
 
-   const MatrixCell: React.FC<MatrixCellProps> = ({ isActive, isPlaying, onClick }) => (
-     <div
-       className={`matrix-cell ${isActive ? 'active' : ''} ${isPlaying ? 'playing' : ''}`}
-       onClick={onClick}
-     />
-   );
+const MatrixCell: React.FC<MatrixCellProps> = ({ isActive, isPlaying, onClick }) => (
+  <div
+    className={`matrix-cell ${isActive ? 'active' : ''} ${isPlaying ? 'playing' : ''}`}
+    onClick={onClick}
+  />
+);
 
 const MusicalMatrixInterface: React.FC = () => {
   const [matrix, setMatrix] = useState<boolean[][]>(
@@ -40,7 +39,8 @@ const MusicalMatrixInterface: React.FC = () => {
   const createAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
       try {
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        audioContextRef.current = new AudioContextClass();
         console.log('Audio context created successfully');
       } catch (err) {
         console.error('Failed to create audio context:', err);
@@ -124,51 +124,51 @@ const MusicalMatrixInterface: React.FC = () => {
     setIsPlaying(!isPlaying);
   };
 
-     return (
-       <div className="musical-matrix">
-         <h1>Simple Tone Matrix Interface</h1>
-         {error && (
-           <div className="error-message">
-             {error}
-           </div>
-         )}
-         <div className="controls">
-           <button onClick={handlePlayPause}>
-             {isPlaying ? 'Pause' : 'Play'}
-           </button>
-         </div>
-         <div className="tempo-control">
-           <span>Tempo: {tempo} BPM</span>
-           <input
-             type="range"
-             value={tempo}
-             onChange={(e) => setTempo(Number(e.target.value))}
-             min={60}
-             max={240}
-             step={1}
-           />
-         </div>
-         <div className="matrix-grid">
-           {matrix.map((row, rowIndex) => (
-             <div key={rowIndex} className="matrix-row">
-               <div className="note-label">
-                 {notes[rowIndex % notes.length]}{octaves[Math.floor(rowIndex / notes.length)]}
-               </div>
-               {row.map((cell, colIndex) => (
-                 <MatrixCell
-                   key={colIndex}
-                   isActive={cell}
-                   isPlaying={isPlaying && colIndex === currentColumn}
-                   onClick={() => toggleCell(rowIndex, colIndex)}
-                 />
-               ))}
-             </div>
-           ))}
-         </div>
-       </div>
-     );
-   };
+  return (
+    <div className="musical-matrix">
+      <h1>Simple Tone Matrix Interface</h1>
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+      <div className="controls">
+        <button onClick={handlePlayPause}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
+      </div>
+      <div className="tempo-control">
+        <span>Tempo: {tempo} BPM</span>
+        <input
+          type="range"
+          value={tempo}
+          onChange={(e) => setTempo(Number(e.target.value))}
+          min={60}
+          max={240}
+          step={1}
+        />
+      </div>
+      <div className="matrix-grid">
+        {matrix.map((row, rowIndex) => (
+          <div key={rowIndex} className="matrix-row">
+            <div className="note-label">
+              {notes[rowIndex % notes.length]}{octaves[Math.floor(rowIndex / notes.length)]}
+            </div>
+            {row.map((cell, colIndex) => (
+              <MatrixCell
+                key={colIndex}
+                isActive={cell}
+                isPlaying={isPlaying && colIndex === currentColumn}
+                onClick={() => toggleCell(rowIndex, colIndex)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-   const App: React.FC = MusicalMatrixInterface;
+const App: React.FC = MusicalMatrixInterface;
 
-   export default App;
+export default App;
