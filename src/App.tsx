@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Play, Pause, Settings } from 'lucide-react';
-
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const octaves = [3, 4, 5];
@@ -8,9 +6,15 @@ const numColumns = 16;
 
 const MatrixCell = ({ isActive, isPlaying, onClick }) => (
   <div
-    className={`w-8 h-8 border border-gray-300 cursor-pointer transition-all duration-200 ${
-      isActive ? 'bg-blue-500' : 'bg-white'
-    } ${isPlaying ? 'ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
+    style={{
+      width: '2rem',
+      height: '2rem',
+      border: '1px solid #D1D5DB',
+      cursor: 'pointer',
+      transition: 'all 0.2s',
+      backgroundColor: isActive ? '#3B82F6' : 'white',
+      boxShadow: isPlaying ? '0 0 0 2px rgba(252, 211, 77, 0.5)' : 'none'
+    }}
     onClick={onClick}
   />
 );
@@ -87,7 +91,7 @@ const MusicalMatrixInterface = () => {
     }
 
     const now = audioContextRef.current.currentTime;
-    
+
     matrix.forEach((row, index) => {
       if (row[column]) {
         const octaveIndex = Math.floor(index / notes.length);
@@ -121,21 +125,30 @@ const MusicalMatrixInterface = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Simple Tone Matrix Interface</h1>
+    <div style={{ padding: '1rem' }}>
+      <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Simple Tone Matrix Interface</h1>
       {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+        <div style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '1rem', marginBottom: '1rem', borderRadius: '0.25rem' }}>
           {error}
         </div>
       )}
-      <div className="mb-4">
-        <button onClick={handlePlayPause}>
-          {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+      <div style={{ marginBottom: '1rem' }}>
+        <button 
+          onClick={handlePlayPause}
+          style={{
+            padding: '0.5rem 1rem',
+            backgroundColor: '#3B82F6',
+            color: 'white',
+            border: 'none',
+            borderRadius: '0.25rem',
+            cursor: 'pointer'
+          }}
+        >
+          {isPlaying ? 'Pause' : 'Play'}
         </button>
       </div>
-      <div className="flex items-center mb-4">
-        <Settings size={24} className="mr-2" />
-        <span className="mr-2">Tempo: {tempo} BPM</span>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <span style={{ marginRight: '0.5rem' }}>Tempo: {tempo} BPM</span>
         <input
           type="range"
           value={tempo}
@@ -143,13 +156,13 @@ const MusicalMatrixInterface = () => {
           min={60}
           max={240}
           step={1}
-          className="w-64"
+          style={{ width: '16rem' }}
         />
       </div>
-      <div className="border border-gray-300">
+      <div style={{ border: '1px solid #D1D5DB' }}>
         {matrix.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex">
-            <div className="w-12 flex items-center justify-center bg-gray-100 font-semibold">
+          <div key={rowIndex} style={{ display: 'flex' }}>
+            <div style={{ width: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F3F4F6', fontWeight: '600' }}>
               {notes[rowIndex % notes.length]}{octaves[Math.floor(rowIndex / notes.length)]}
             </div>
             {row.map((cell, colIndex) => (
