@@ -80,8 +80,6 @@ const MusicalMatrixInterface: React.FC = () => {
 
     oscillator.start(time);
     oscillator.stop(time + 0.5);
-
-    console.log(`Playing tone: ${frequency} Hz`);
   };
 
   const playColumn = useCallback((column: number) => {
@@ -102,8 +100,6 @@ const MusicalMatrixInterface: React.FC = () => {
         playTone(frequency, now);
       }
     });
-
-    console.log(`Played column: ${column}`);
   }, [matrix]);
 
   useEffect(() => {
@@ -152,16 +148,19 @@ const MusicalMatrixInterface: React.FC = () => {
         {matrix.map((row, rowIndex) => (
           <div key={rowIndex} className="matrix-row">
             <div className="note-label">
-              {notes[rowIndex % notes.length]}{octaves[Math.floor(rowIndex / notes.length)]}
+              <span className="note-name">{notes[rowIndex % notes.length]}</span>
+              <span className="octave">{octaves[Math.floor(rowIndex / notes.length)]}</span>
             </div>
-            {row.map((cell, colIndex) => (
-              <MatrixCell
-                key={colIndex}
-                isActive={cell}
-                isPlaying={isPlaying && colIndex === currentColumn}
-                onClick={() => toggleCell(rowIndex, colIndex)}
-              />
-            ))}
+            <div className="cell-container">
+              {row.map((cell, colIndex) => (
+                <MatrixCell
+                  key={colIndex}
+                  isActive={cell}
+                  isPlaying={isPlaying && colIndex === currentColumn}
+                  onClick={() => toggleCell(rowIndex, colIndex)}
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>
