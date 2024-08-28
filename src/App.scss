@@ -52,16 +52,6 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    .note-name {
-      width: 20px;
-      text-align: right;
-    }
-
-    .octave {
-      width: 15px;
-      text-align: left;
-    }
   }
 
   .cell-container {
